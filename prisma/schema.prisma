@@ -23,6 +23,7 @@ model Department {
 model Employee {
   id           Int          @id @default(autoincrement())
   username     String
+  password     String         // TODO:@kasuba97 hash me
   department   Department   @relation(fields: [departmentId], references: [id])
   departmentId Int
   role         String
@@ -41,6 +42,7 @@ model Service {
 model Customer {
   id         Int          @id @default(autoincrement())
   Username  String
+  password  String
   email      String       @unique
   meters     Meter[]      // One-to-many relationship
   invoices   Invoice[]    // One-to-many relationship
