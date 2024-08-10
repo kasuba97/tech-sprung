@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Department {
+  id              Int          @id @default(autoincrement())
+  name            String
+  employees       Employee[]   // One-to-many relationship
+  services        Service[]    // One-to-many relationship
+}
+
+model Employee {
+  id           Int          @id @default(autoincrement())
+  username     String
+  department   Department   @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  role         String
+  email        String       @unique
+}
+
+model Service {
+  id             Int          @id @default(autoincrement())
+  name           String
+  department     Department   @relation(fields: [departmentId], references: [id])
+  departmentId   Int
+  meters         Meter[]      // One-to-many relationship
+  invoices       Invoice[]    // One-to-many relationship
+}
+
+model Customer {
+  id         Int          @id @default(autoincrement())
+  Username  String
+  email      String       @unique
+  meters     Meter[]      // One-to-many relationship
+  invoices   Invoice[]    // One-to-many relationship
+}
+
+model Meter {
+  id          Int          @id @default(autoincrement())
+  serialNumber String       @unique
+  service     Service      @relation(fields: [serviceId], references: [id])
+  serviceId   Int
+  customer    Customer     @relation(fields: [customerId], references: [id])
+  customerId  Int
+  readings    Reading[]    // One-to-many relationship
+}
+
+model Reading {
+  id         Int          @id @default(autoincrement())
+  date       DateTime
+  value      Float
+  meter      Meter        @relation(fields: [meterId], references: [id])
+  meterId    Int
+}
+
+model Invoice {
+  id          Int          @id @default(autoincrement())
+  issueDate   DateTime
+  dueDate     DateTime
+  amount      Float
+  customer    Customer     @relation(fields: [customerId], references: [id])
+  customerId  Int
+  service     Service      @relation(fields: [serviceId], references: [id])
+  serviceId   Int
+  paid        Boolean      @default(false)
+}
