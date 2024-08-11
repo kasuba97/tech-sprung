@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import prisma from "../utils/prisma";
+import { prisma } from "../utils/prisma";
 
 /**
  * Creates a new Department
@@ -50,14 +50,13 @@ export const getAllDepartments = async (req: Request, res: Response) => {
  */
 export const getDepartmentById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const departmentID = parseInt(id);
 
   if (!id) return res.status(400).send("Error: Invalid department ID");
 
   try {
     const response = await prisma.department.findFirst({
       where: {
-        id: departmentID,
+        id: parseInt(id),
       },
     });
 

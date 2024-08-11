@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  closeEmployeeAccount,
   getAllUsers,
   signInEmployee,
   signUpemployee,
@@ -8,6 +9,7 @@ const userRoutes = Router();
 
 // handles
 userRoutes.get("/all", getAllUsers);
+userRoutes.delete("/:id", closeEmployeeAccount);
 userRoutes.post("/signup", signUpemployee);
 userRoutes.post("/signin", signInEmployee);
 
