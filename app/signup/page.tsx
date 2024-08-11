@@ -7,17 +7,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../../services/user";
 
-export interface FormValues {
-  confirmPass: string;
-  email: string;
-  password: string;
-  username: string;
-  department: string;
-  role: string;
-}
-
 export default function Page() {
-  const { handleSignUp } = useAuth();
+  const { handleSignup } = useAuth();
   const [showPass, setShowPass] = useState<boolean>(false);
   const [userExists, setUserExists] = useState<boolean>(false);
   const [isMember, setIsMember] = useState<boolean>(false);
@@ -26,16 +17,13 @@ export default function Page() {
       username: "",
       email: "",
       password: "",
-      confirmPass: "",
-      department: "",
       role: "",
+      departmentId: "",
     },
 
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       password: (value) => value.length == 0 && "Invalid password",
-      confirmPass: (value, { password }) =>
-        password == value ? null : "Password mismatch",
     },
 
     clearInputErrorOnChange: true,
@@ -43,6 +31,7 @@ export default function Page() {
 
   const { push } = useRouter();
 
+  form.getValues();
   return (
     <Box className="w-[100%]">
       <Box className="flex flex-col items-center justify-center">
@@ -56,8 +45,7 @@ export default function Page() {
               Fill in the form to signup
             </Text>
           </Box>
-
-          <form onSubmit={form.onSubmit(handleSignUp)} className="space-y-5">
+          <form onSubmit={form.onSubmit(handleSignup)} className="space-y-5">
             <Box className="flex flex-col gap-2 items-center">
               <Text>Username</Text>
               <TextInput
@@ -105,6 +93,18 @@ export default function Page() {
                 <Box className="flex flex-col gap-2 items-center">
                   <Text>Department ID</Text>
                   <TextInput
+                    {...form.getInputProps("departmentId")}
+                    styles={{
+                      input: {
+                        borderRadius: "10px",
+                        paddingInline: "8px",
+                      },
+                    }}
+                  />
+
+                  <Text>Role</Text>
+                  <TextInput
+                    {...form.getInputProps("role")}
                     styles={{
                       input: {
                         borderRadius: "10px",
@@ -137,20 +137,6 @@ export default function Page() {
               />
             </Box>
 
-            <Box className="relative flex flex-col gap-2 items-center">
-              <Text>Confirm Password *</Text>
-              <TextInput
-                {...form.getInputProps("confirmPass")}
-                styles={{
-                  input: {
-                    borderRadius: "10px",
-                    paddingInline: "8px",
-                  },
-                }}
-                type={"password"}
-              />
-            </Box>
-
             <Box className="flex justify-center my-5">
               <PrimaryButton
                 label="Sign Up"
@@ -162,7 +148,7 @@ export default function Page() {
               <Text className="text-[12px]">Already have an account? </Text>
               <Text
                 className="text-[12px] pl-1 text-[#35607e] cursor-pointer"
-                onClick={() => push("/signup")}
+                onClick={() => push("/")}
               >
                 Login
               </Text>
