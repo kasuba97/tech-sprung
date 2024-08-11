@@ -148,7 +148,7 @@ export default function Page() {
               <Text className="text-[12px]">Already have an account? </Text>
               <Text
                 className="text-[12px] pl-1 text-[#35607e] cursor-pointer"
-                onClick={() => push("/signup")}
+                onClick={() => push("/")}
               >
                 Login
               </Text>

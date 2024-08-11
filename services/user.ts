@@ -19,7 +19,18 @@ export const useAuth = () => {
 
     console.log("user", user);
   };
-  const handleLogin = async () => {};
+  const handleLogin = async (
+    values: {
+      EmailOrUsername: string;
+      password: string;
+    },
+    event: FormEvent<HTMLFormElement> | undefined
+  ) => {
+    event?.preventDefault();
+    const user = await axios.post(`${API_BASE_URL}/user/signin`, values);
+
+    console.log("user", user);
+  };
 
   return { handleSignup, handleLogin };
 };

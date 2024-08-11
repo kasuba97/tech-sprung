@@ -106,9 +106,9 @@ export const signUpemployee = async (req: Request, res: Response) => {
  * @param res user details ``type Object``
  */
 export const signInEmployee = async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { EmailOrUsername, password } = req.body;
 
-  if (!password && (!username || username)) {
+  if (!password && !EmailOrUsername) {
     return res.status(400).json({
       error: "Email or username, or password is incorrect",
     });
@@ -117,7 +117,7 @@ export const signInEmployee = async (req: Request, res: Response) => {
   try {
     const user = await prisma.employee.findFirst({
       where: {
-        OR: [{ email: email }, { username: username }],
+        OR: [{ email: EmailOrUsername }, { username: EmailOrUsername }],
       },
     });
 
