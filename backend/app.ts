@@ -1,22 +1,33 @@
-import express, { Router } from "express";
+import express, { Router, Request } from "express";
 import morgan from "morgan";
-import userRouter from "./routers/user";
+import userRoutes from "./routers/user";
+import bodyParser from "body-parser";
+import departmentRoutes from "./routers/department";
 
 const PORT = 3001; // since next is running on port 3000
 
 const app = express();
-const router = Router();
 
-// Configure Morgan to log requests in 'combined' format
 // still in development mode right?😑
 app.use(morgan("dev"));
 
-app.get("/", (req, res) => res.status(200).send("server 🚀 touch down!"));
-// Use your router middleware
-app.get("/user", userRouter);
+app.use(bodyParser.json());
 
+morgan.token("body", (req: Request) => JSON.stringify(req.body));
+
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
+
+// falcon 9 touch down
+app.get("/", (req, res) => res.status(200).send("server 🚀 touch down!"));
+
+// routers
+app.use("/user", userRoutes);
+app.use("/department", departmentRoutes);
+
+// 404
 app.use((req, res, next) => {
-  //   res.status(404).json({ message: "Not Found" });
   res.status(404).send("wait who?");
 });
 

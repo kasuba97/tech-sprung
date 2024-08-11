@@ -1,9 +1,14 @@
-import prisma from "@/utils/prisma";
-import { Request, Response, Router } from "express";
-const userRouter = Router();
+import { Router } from "express";
+import {
+  getAllUsers,
+  signInEmployee,
+  signUpemployee,
+} from "../controllers/employee";
+const userRoutes = Router();
 
 // handles
-userRouter.post("/signup");
+userRoutes.get("/all", getAllUsers);
+userRoutes.post("/signup", signUpemployee);
+userRoutes.post("/signin", signInEmployee);
 
-// export default signUpemployee;
-export default userRouter;
+export default userRoutes;
