@@ -13,4 +13,9 @@ userRoutes.delete("/:id", closeEmployeeAccount);
 userRoutes.post("/signup", signUpemployee);
 userRoutes.post("/signin", signInEmployee);
 
+// 404
+userRoutes.use((req, res, next) => {
+  res.status(404).send("wait who?");
+});
+
 export default userRoutes;

@@ -1,8 +1,5 @@
 import { hashPassword, prisma } from "../utils/prisma";
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { env } from "process";
 
 /**
  * Create a new Plan-b employee
@@ -72,6 +69,8 @@ export const signUpemployee = async (req: Request, res: Response) => {
     });
   }
 
+  const parseDepartmentId = parseInt(departmentId);
+
   const passwordHash = await hashPassword(password);
 
   try {
@@ -83,7 +82,7 @@ export const signUpemployee = async (req: Request, res: Response) => {
         password: passwordHash,
         department: {
           connect: {
-            id: departmentId,
+            id: parseDepartmentId,
           },
         },
       },
@@ -95,6 +94,8 @@ export const signUpemployee = async (req: Request, res: Response) => {
       res.status(500).send(`Error: user with this email or username exists`);
       return;
     }
+    console.log("Error: ", err);
+
     return res.status(500).send(err);
   }
 };

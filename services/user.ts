@@ -1,7 +1,25 @@
 "use client";
-import { useCallback } from "react";
+import { FormEvent } from "react";
+import { API_BASE_URL } from "../constants/constants";
+import axios from "axios";
 
 export const useAuth = () => {
-  const handleSignup = useCallback(async () => {}, []);
-  const handleLogin = useCallback(async () => {}, []);
+  const handleSignup = async (
+    values: {
+      username: string;
+      email: string;
+      password: string;
+      role: string;
+      departmentId: string;
+    },
+    event: FormEvent<HTMLFormElement> | undefined
+  ) => {
+    event?.preventDefault();
+    const user = await axios.post(`${API_BASE_URL}/user/signup`, values);
+
+    console.log("user", user);
+  };
+  const handleLogin = async () => {};
+
+  return { handleSignup, handleLogin };
 };
